@@ -1,6 +1,16 @@
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   product: Object
+});
+
+const formattedPrice = computed(() => {
+  if (!props.product.price && props.product.price !== 0) return '';
+  // Convert number to string
+  const priceStr = props.product.price.toString();
+  // Use regex to add dot as thousand separator
+  return priceStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 });
 </script>
 
@@ -25,7 +35,7 @@ defineProps({
       <div class="md:w-1/2 flex flex-col justify-between px-6 h-full text-black">
         <div>
           <h1 class="text-5xl font-extrabold mb-6 text-yellow-500" style="text-shadow: 2px 2px 4px black;">{{ product.name }}</h1>
-          <p class="text-2xl text-yellow-400 font-semibold mb-6" style="text-shadow: 1px 1px 3px black;">Harga: Rp {{ product.price.toLocaleString() }}</p>
+          <p class="text-2xl text-yellow-400 font-semibold mb-6" style="text-shadow: 1px 1px 3px black;">Harga: Rp {{ formattedPrice }}</p>
           <p class="text-lg mb-6" style="text-shadow: 1px 1px 2px black;">{{ product.description }}</p>
           <div class="flex space-x-10 mb-8">
             <div class="flex items-center space-x-3 text-yellow-400" style="text-shadow: 1px 1px 2px black;">
