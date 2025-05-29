@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
   product: Object
@@ -12,17 +13,45 @@ const formattedPrice = computed(() => {
   // Use regex to add dot as thousand separator
   return priceStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 });
+
+const likes = ref(props.product.likes || 0);
+const likedKey = `liked_product_${props.product.product_code}`;
+const liked = ref(false);
+
+const likeProduct = async () => {
+  if (liked.value) return;
+  try {
+    const response = await axios.post(`/products/${props.product.product_code}/like`);
+    likes.value = response.data.likes;
+    liked.value = true;
+    localStorage.setItem(likedKey, 'true');
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      alert(error.response.data.message);
+      liked.value = true;
+      localStorage.setItem(likedKey, 'true');
+    } else {
+      alert('Terjadi kesalahan saat memberikan like.');
+    }
+  }
+};
+
+onMounted(() => {
+  if (localStorage.getItem(likedKey) === 'true') {
+    liked.value = true;
+  }
+});
 </script>
 
 <template>
   <div class="w-full h-screen p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-    <nav class="mb-8 text-base text-gray-700" aria-label="Breadcrumb">
+    <!-- <nav class="mb-8 text-base text-gray-700" aria-label="Breadcrumb">
       <ol class="list-reset flex">
         <li><a href="/products" class="text-yellow-500 hover:underline" style="text-shadow: 1px 1px 2px black;">Produk</a></li>
         <li><span class="mx-3 text-gray-400" style="text-shadow: 1px 1px 2px black;">/</span></li>
         <li class="text-gray-500" style="text-shadow: 1px 1px 2px black;">{{ product.name }}</li>
       </ol>
-    </nav>
+    </nav> -->
     <div class="flex flex-1 flex-col md:flex-row md:space-x-12">
       <div class="md:w-1/2 flex justify-center items-end mb-8 md:mb-0" style="max-height: 600px;">
         <img
@@ -52,15 +81,28 @@ const formattedPrice = computed(() => {
             </div>
           </div>
         </div>
-        <button
-          type="button"
-          class="inline-flex items-center px-8 py-4 bg-yellow-400 text-black text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition duration-300 self-start"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m4-9l2 9" />
-          </svg>
-          Beli Sekarang
-        </button>
+        <div class="flex items-center space-x-6">
+          <button
+            type="button"
+            class="inline-flex items-center px-6 py-3 bg-yellow-400 text-black text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition duration-300"
+            :disabled="liked"
+            @click="likeProduct"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            </svg>
+            {{ liked ? 'Liked' : 'Like' }} ({{ likes }})
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center px-8 py-4 bg-yellow-400 text-black text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition duration-300 self-start"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m4-9l2 9" />
+            </svg>
+            Beli Sekarang
+          </button>
+        </div>
       </div>
     </div>
   </div>

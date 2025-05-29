@@ -68,18 +68,20 @@
       </div>
 
       <div>
-        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Gambar (URL sementara)</label>
+        <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Gambar</label>
         <input
           id="image"
-          v-model="form.image"
-          placeholder="Masukkan URL gambar produk"
+          type="file"
+          @change="onFileChange"
+          accept="image/*"
           class="w-full border border-gray-300 p-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-150 ease-in-out"
-          :class="{'border-red-500': form.errors.image}"
+          :class="{'border-red-500': form.errors.image || imageError}"
         />
         <p v-if="form.errors.image" class="text-red-600 text-xs mt-1">{{ form.errors.image }}</p>
-        <div v-if="form.image" class="mt-3">
+        <p v-if="imageError" class="text-red-600 text-xs mt-1">{{ imageError }}</p>
+        <div v-if="imageFile" class="mt-3">
           <p class="text-sm font-semibold mb-1 text-gray-800">Preview Gambar:</p>
-          <img :src="form.image" alt="Preview Gambar Produk" class="w-full h-36 object-contain rounded-md border border-gray-300 shadow-sm" />
+          <img :src="URL.createObjectURL(imageFile)" alt="Preview Gambar Produk" class="w-full h-36 object-contain rounded-md border border-gray-300 shadow-sm" />
         </div>
       </div>
 
@@ -95,6 +97,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 
 const form = useForm({
@@ -103,10 +106,28 @@ const form = useForm({
   price: '',
   size: '',
   material: '',
-  image: '', // sementara url manual
+  image: null, // change to null for file upload
 })
 
+const imageFile = ref(null)
+const imageError = ref('')
+
+function onFileChange(event) {
+  const file = event.target.files[0]
+  if (file && file.size > 2 * 1024 * 1024) { // 2MB limit
+    imageError.value = 'Ukuran gambar terlalu besar. Maksimal 2MB.'
+    imageFile.value = null
+    form.image = null
+  } else {
+    imageError.value = ''
+    imageFile.value = file
+    form.image = file
+  }
+}
+
 function submit() {
-  form.post(route('products.store'))
+  form.post(route('products.store'), {
+    forceFormData: true,
+  })
 }
 </script>

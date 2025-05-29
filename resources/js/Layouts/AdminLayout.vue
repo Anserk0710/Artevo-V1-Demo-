@@ -29,7 +29,7 @@ function toggleNavigationDropdown() {
               <div class="flex">
                 <!-- Logo and Hamburger -->
                 <div class="flex shrink-0 items-center space-x-4">
-                  <Link :href="route('dashboard')">
+                  <Link :href="route('admin.dashboard')">
                     <svg
                       class="block h-9 w-auto fill-current text-gray-800"
                       xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +97,9 @@ function toggleNavigationDropdown() {
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                   <Link
-                    :href="route('dashboard')"
+                    :href="route('admin.dashboard')"
                     class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 transition"
-                    :class="{ 'border-b-2 border-indigo-400 text-gray-900': route().current('dashboard') }"
+                    :class="{ 'border-b-2 border-indigo-400 text-gray-900': route().current('admin.dashboard') }"
                   >
                     Dashboard
                   </Link>

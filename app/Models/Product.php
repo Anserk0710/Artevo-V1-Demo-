@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -14,6 +15,7 @@ class Product extends Model
         'size',
         'material',
         'product_code',
+        'likes',
     ];
 
     protected static function boot()
@@ -23,5 +25,10 @@ class Product extends Model
         static::creating(function ($product){
             $product->product_code = strtoupper(uniqid('PRD'));
         });
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(ProductLike::class);
     }
 }

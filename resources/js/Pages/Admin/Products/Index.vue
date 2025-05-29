@@ -119,9 +119,9 @@ function goToPage(url) {
                     <p>Kode Produk: {{ product.product_code }}</p>
                     <QRCodeVue :value="`http://127.0.0.1:8000/products/${product.product_code}`" :size="50" />
                     <div class="flex gap-3 mt-2">
-                        <Link :href="route('products.edit', product.id)" class="text-green-600 underline">
-                            Edit
-                        </Link>
+<Link :href="route('admin.products.edit', product.id)" class="text-green-600 underline">
+    Edit
+</Link>
                         <button @click="destroy(product.id)" class="text-red-600 underline">Hapus</button>
                     </div>
                     <div class="flex gap-3 mt-3">
