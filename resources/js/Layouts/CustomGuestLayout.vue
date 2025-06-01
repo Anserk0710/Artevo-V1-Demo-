@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-indigo-600 p-6 animate-gradient-x">
+  <div class="min-h-screen flex flex-col items-center justify-center p-6 animate-gradient-x custom-gradient-bg">
     <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8 animate-fade-in">
       <slot />
     </div>
@@ -27,15 +27,20 @@
 
 @keyframes gradientX {
   0%, 100% {
-    background-position: 0% center;
+    background-position: 0% 50%;
   }
   50% {
-    background-position: 100% center;
+    background-position: 100% 50%;
   }
 }
 
 .animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradientX 8s ease infinite;
+  background-size: 600% 600%;
+  animation: gradientX 30s ease infinite;
+  background-repeat: no-repeat;
+}
+
+.custom-gradient-bg {
+  background-image: linear-gradient(90deg, rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5), rgba(0, 0, 255, 0.5));
 }
 </style>

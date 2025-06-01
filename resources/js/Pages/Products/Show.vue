@@ -44,60 +44,52 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-screen p-10 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-    <!-- <nav class="mb-8 text-base text-gray-700" aria-label="Breadcrumb">
-      <ol class="list-reset flex">
-        <li><a href="/products" class="text-yellow-500 hover:underline" style="text-shadow: 1px 1px 2px black;">Produk</a></li>
-        <li><span class="mx-3 text-gray-400" style="text-shadow: 1px 1px 2px black;">/</span></li>
-        <li class="text-gray-500" style="text-shadow: 1px 1px 2px black;">{{ product.name }}</li>
-      </ol>
-    </nav> -->
-    <div class="flex flex-1 flex-col md:flex-row md:space-x-12">
-      <div class="md:w-1/2 flex justify-center items-end mb-8 md:mb-0" style="max-height: 600px;">
+  <div class="w-full min-h-screen p-6 md:p-12 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-500 flex flex-col">
+    <div class="flex flex-1 flex-col md:flex-row md:space-x-16">
+      <div class="md:w-1/2 flex justify-center items-center mb-8 md:mb-0 max-h-[600px]">
         <img
           :src="product.image || 'https://via.placeholder.com/600x600.png?text=Product+Image'"
           alt="Product Image"
-          class="rounded-lg object-cover w-full max-h-full max-w-full shadow-md"
-          style="max-height: 100%; max-width: 100%;"
+          class="rounded-xl object-cover w-full max-w-full max-h-full shadow-lg transition-transform duration-300 hover:scale-105"
         />
       </div>
-      <div class="md:w-1/2 flex flex-col justify-between px-6 h-full text-black">
+      <div class="md:w-1/2 flex flex-col justify-between px-6 md:px-8 h-full text-gray-900">
         <div>
-          <h1 class="text-5xl font-extrabold mb-6 text-yellow-500" style="text-shadow: 2px 2px 4px black;">{{ product.name }}</h1>
-          <p class="text-2xl text-yellow-400 font-semibold mb-6" style="text-shadow: 1px 1px 3px black;">Harga: Rp {{ formattedPrice }}</p>
-          <p class="text-lg mb-6" style="text-shadow: 1px 1px 2px black;">{{ product.description }}</p>
-          <div class="flex space-x-10 mb-8">
-            <div class="flex items-center space-x-3 text-yellow-400" style="text-shadow: 1px 1px 2px black;">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <h1 class="text-4xl md:text-6xl font-extrabold mb-6 md:mb-8 text-yellow-600 drop-shadow-lg">{{ product.name }}</h1>
+          <p class="text-2xl md:text-3xl text-yellow-700 font-bold mb-6 md:mb-8">Harga: Rp {{ formattedPrice }}</p>
+          <p class="text-lg md:text-xl mb-6 md:mb-8 leading-relaxed text-yellow-900">{{ product.description }}</p>
+          <div class="flex flex-col md:flex-row md:space-x-12 space-y-6 md:space-y-0 mb-8 md:mb-10">
+            <div class="flex items-center space-x-4 text-yellow-700 drop-shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 md:h-8 w-7 md:w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h4l3 8 4-16 3 8h4" />
               </svg>
-              <span class="text-lg"><strong>Ukuran:</strong> {{ product.size }}</span>
+              <span class="text-lg md:text-xl font-semibold"><strong>Ukuran:</strong> {{ product.size }}</span>
             </div>
-            <div class="flex items-center space-x-3 text-yellow-400" style="text-shadow: 1px 1px 2px black;">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="flex items-center space-x-4 text-yellow-700 drop-shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-7 md:h-8 w-7 md:w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.485-9h-1M4.515 12h-1m15.364 4.95l-.707-.707M6.343 6.343l-.707-.707m12.728 12.728l-.707-.707M6.343 17.657l-.707-.707" />
               </svg>
-              <span class="text-lg"><strong>Bahan:</strong> {{ product.material }}</span>
+              <span class="text-lg md:text-xl font-semibold"><strong>Bahan:</strong> {{ product.material }}</span>
             </div>
           </div>
         </div>
-        <div class="flex items-center space-x-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-8 space-y-5 sm:space-y-0">
           <button
             type="button"
-            class="inline-flex items-center px-6 py-3 bg-yellow-400 text-black text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition duration-300"
+            class="inline-flex items-center px-8 py-4 sm:px-8 sm:py-4 bg-yellow-500 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-400 transition duration-300 w-full sm:w-auto justify-center disabled:opacity-60 disabled:cursor-not-allowed"
             :disabled="liked"
             @click="likeProduct"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
             </svg>
             {{ liked ? 'Liked' : 'Like' }} ({{ likes }})
           </button>
           <button
             type="button"
-            class="inline-flex items-center px-8 py-4 bg-yellow-400 text-black text-lg font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition duration-300 self-start"
+            class="inline-flex items-center px-10 py-4 sm:px-10 sm:py-4 bg-yellow-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-yellow-700 focus:outline-none focus:ring-4 focus:ring-yellow-500 transition duration-300 w-full sm:w-auto justify-center"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m4-9l2 9" />
             </svg>
             Beli Sekarang

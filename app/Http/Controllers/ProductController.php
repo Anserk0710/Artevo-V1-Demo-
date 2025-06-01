@@ -106,7 +106,7 @@ class ProductController extends Controller
         $description = 'ID: ' . $product->id . ' - Nama: ' . $product->name;
         $this->logActivity('Menghapus Produk', $description);
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 
     public function store(Request $request)
@@ -123,7 +123,8 @@ class ProductController extends Controller
         $description = $this->getAdminName() . " menambahkan produk: Nama Produk: {$product->name}, Harga: {$product->price}, Ukuran: {$product->size}, Material: {$product->material}.";
         $this->logActivity('Menambah Produk', $description);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
+        // Return Inertia redirect to admin.products.index with success message
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     public function showByCode($code)

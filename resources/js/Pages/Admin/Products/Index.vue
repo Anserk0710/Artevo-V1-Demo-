@@ -75,9 +75,9 @@ function printQRCode(productId) {
     }
 }
 
-function destroy(id) {
+function destroy(routeName, id) {
     if (confirm('Apakah Anda Ingin Menghapus Data Ini?')) {
-        router.delete(route('products.destroy', id));
+        router.delete(route(routeName, id));
     }
 }
 
@@ -102,7 +102,7 @@ function goToPage(url) {
                 </h2>
                 <button
                     @click="router.get('/admin/products/create')"
-                    class="px-4 py-2 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1"
+                    class="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1"
                 >
                     + Tambah Produk
                 </button>
@@ -110,52 +110,87 @@ function goToPage(url) {
         </template>
 
         <div>
-            <div class="flex flex-wrap -mx-2">
-                <div v-for="product in products.data" :key="product.id" :id="`print-section-${product.id}`" class="w-1/2 px-2 mb-4 border p-2 rounded print-area">
-                    <h2 class="font-semibold">{{ product.name }}</h2>
-                    <p>Harga: Rp {{ formatPrice(product.price) }}</p>
-                    <p>Ukuran: {{ product.size }}</p>
-                    <p>Bahan: {{ product.material }}</p>
-                    <p>Kode Produk: {{ product.product_code }}</p>
+            <div class="flex flex-col sm:flex-row flex-wrap gap-4 py-4 px-2">
+                <div
+                    v-for="product in products.data"
+                    :key="product.id"
+                    :id="`print-section-${product.id}`"
+                    class="w-full sm:w-72 border p-4 rounded-lg print-area bg-white shadow-md"
+                >
+                    <h2 class="font-semibold text-lg mb-2">{{ product.name }}</h2>
+                    <p class="mb-1 text-sm sm:text-base">Harga: Rp {{ formatPrice(product.price) }}</p>
+                    <p class="mb-1 text-sm sm:text-base">Ukuran: {{ product.size }}</p>
+                    <p class="mb-1 text-sm sm:text-base">Bahan: {{ product.material }}</p>
+                    <p class="mb-1 text-sm sm:text-base">Kode Produk: {{ product.product_code }}</p>
                     <QRCodeVue :value="`http://127.0.0.1:8000/products/${product.product_code}`" :size="50" />
-                    <div class="flex gap-3 mt-2">
-<Link :href="route('admin.products.edit', product.id)" class="text-green-600 underline">
-    Edit
-</Link>
-                        <button @click="destroy(product.id)" class="text-red-600 underline">Hapus</button>
-                    </div>
                     <div class="flex gap-3 mt-3">
-                        <button v-if="product.image" @click="openPopup(product.image)" class="px-4 py-2 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1">
+                        <Link
+                            :href="route('admin.products.edit', product.id)"
+                            class="text-green-600 underline transition-transform duration-300 ease-in-out hover:scale-110 hover:animate-pulse text-sm sm:text-base"
+                        >
+                            Edit
+                        </Link>
+                        <button
+                            @click="destroy('admin.products.destroy', product.id)"
+                            class="text-red-600 underline transition-transform duration-300 ease-in-out hover:scale-110 hover:animate-pulse text-sm sm:text-base"
+                        >
+                            Hapus
+                        </button>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button
+                            v-if="product.image"
+                            @click="openPopup(product.image)"
+                            class="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1 hover:animate-pulse"
+                        >
                             Lihat Gambar
                         </button>
-                        <button @click="printQRCode(product.id)" class="px-4 py-2 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1">
+                        <button
+                            @click="printQRCode(product.id)"
+                            class="px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 text-white rounded shadow-lg transition-all duration-500 ease-in-out transform hover:scale-110 hover:shadow-4xl hover:brightness-110 hover:-translate-y-1 hover:animate-pulse"
+                        >
                             Cetak QR
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between mt-4">
+            <div class="flex justify-between mt-6">
                 <button
                     :disabled="!products.prev_page_url"
                     @click.prevent="goToPage(products.prev_page_url)"
-                    class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 transition duration-300 ease-in-out hover:brightness-110 disabled:hover:brightness-100"
                 >
                     Sebelumnya
                 </button>
                 <button
                     :disabled="!products.next_page_url"
                     @click.prevent="goToPage(products.next_page_url)"
-                    class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+                    class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 transition duration-300 ease-in-out hover:brightness-110 disabled:hover:brightness-100"
                 >
                     Berikutnya
                 </button>
             </div>
         </div>
 
-        <div v-if="popupImage" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" @click.self="closePopup">
-            <div class="relative bg-white rounded p-4 max-w-lg max-h-full overflow-auto">
-                <button @click="closePopup" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 font-bold text-xl">&times;</button>
-                <img :src="popupImage" alt="Gambar Produk" class="max-w-full max-h-[80vh] rounded" />
+        <div
+            v-if="popupImage"
+            class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 animate__animated animate__fadeIn"
+            @click.self="closePopup"
+        >
+            <div
+                class="relative bg-white rounded p-4 max-w-full sm:max-w-lg max-h-full overflow-auto animate__animated animate__zoomIn"
+            >
+                <button
+                    @click="closePopup"
+                    class="absolute top-2 right-2 text-gray-700 hover:text-gray-900 font-bold text-xl"
+                >
+                    &times;
+                </button>
+                <img
+                    :src="popupImage"
+                    alt="Gambar Produk"
+                    class="max-w-full max-h-[80vh] rounded"
+                />
             </div>
         </div>
     </AdminLayout>

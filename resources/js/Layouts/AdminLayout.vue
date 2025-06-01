@@ -5,6 +5,8 @@ import Dropdown from '../Components/Dropdown.vue';
 import DropdownLink from '../Components/DropdownLink.vue';
 import { Link } from '@inertiajs/vue3';
 
+import 'animate.css';
+
 const showingNavigationDropdown = ref(false);
 const isOpen = ref(true);
 
@@ -18,29 +20,24 @@ function toggleNavigationDropdown() {
 </script>
 
 <template>
-  <div>
-    <div class="min-h-screen bg-gray-100 flex">
+  <div class="relative min-h-screen bg-gradient-to-r from-indigo-100 via-white to-indigo-100">
+    <svg class="hidden sm:block absolute top-0 left-0 w-48 h-48 text-indigo-200" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="z-index:0;">
+      <circle cx="50" cy="50" r="50" />
+    </svg>
+    <svg class="hidden sm:block absolute bottom-0 right-0 w-48 h-48 text-indigo-200" fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="z-index:0;">
+      <rect width="100" height="100" rx="20" />
+    </svg>
+    <div class="h-screen bg-transparent flex relative" style="z-index:1;">
       <Sidebar :isOpen="isOpen" :toggleSidebar="toggleSidebar" />
 
       <div class="flex-1 flex flex-col">
-<nav class="border-b border-gray-300 bg-white shadow-md">
+        <nav class="border-b border-gray-300 bg-white shadow-md">
           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-<div class="flex h-16 justify-between font-sans">
+            <div class="flex h-16 justify-between font-sans">
               <div class="flex">
                 <!-- Logo and Hamburger -->
                 <div class="flex shrink-0 items-center space-x-4">
                   <Link :href="route('admin.dashboard')">
-                    <svg
-                      class="block h-9 w-auto fill-current text-gray-800"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 48 48"
-                      fill="none"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M24 4C12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20S35.046 4 24 4z"
-                      />
-                    </svg>
                   </Link>
                   <!-- Sidebar Toggle Button -->
                   <div class="flex items-center">
